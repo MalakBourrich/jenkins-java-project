@@ -10,7 +10,9 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/username/jenkins-java-project.git'
+                git branch: 'main',
+                 credentialsId: '5c66587e-cc6f-4c4e-afdc-9648cfe4d14f',
+                 url: 'https://github.com/MalakBourrich/jenkins-java-project.git'
             }
         }
 
@@ -31,5 +33,19 @@ pipeline {
                 bat 'mvn package'
             }
         }
+    }
+    post {
+
+        success {
+            echo "Build #${BUILD_NUMBER} réussi"
+                // emailext to: 'team@example.com', subject: 'Build OK', body: '...'
+        }
+        failure {
+            echo "Build #${BUILD_NUMBER} échoué"
+        }
+        always {
+            cleanWs() // nettoyer le workspace après chaque build
+        }
+    }
     }
 }
